@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping list</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+    <div id="shopping-list">
+        <div class="header">
+
+            <!-- <h1>{{header.toLocaleUpperCase()}}</h1> -->
+            <!-- <h1>{{header ? header : 'Welcome'}}</h1> -->
+            <!-- if we don't set the header in data()
+            the message 'Welcome' will appear
+            or we can write:-->
+            <h1>{{header || 'Welcome'}}</h1>
+
+            <button v-if="editing" @click="doEdit(false)" class="btn btn-cancel">Cancel</button>
+            <button v-else @click="doEdit(true)" class="btn btn-primry">Add Item</button>
+            <!-- with v-is and if-else we can dinamycally toggle elements based on how our conditional evaluates-->
+        </div>
+
+        <div v-if="editing" class="add-item-form">
+            <!-- we added v-if to hide the form; 
+                v-if toggles the existence of the element on the page -->
+
+            <input @keyup.enter="saveItem" v-model="newItem" 
+            type="text" placeholder="Add an item">
+            <p class="counter">{{characterCount}}/200</p>
+            <!--
+                    we added v-on:keyup.enter to add the item on pressing enter
+                    we can wrute "@" instead of "v-on:"
+                -->
+            <!-- v-model
+                .lazy -> so the input can will appear only after I unblur it
+                .number -> cast the data to a number
+                .trim -> remove any surrounding whitespaces from the data-->
+            <!-- <label><input type="radio" v-model="newItemPriority" value="low">Low</label>
+            <label><input type="radio" v-model="newItemPriority" value="high">High</label> -->
+
+            <!-- with select: -->
+            <!-- <label>
+                Priority
+                <select v-model="newItemPriority">
+                    <option value="low">Low</option>
+                    <option value="high">High</option>
+                </select>
+            </label> -->
+
+            <!-- with checkbox: -->
+            <label>
+                <input type="checkbox" v-model="newItemHighPriority">High Priority
+            </label>
+
+            <!-- we disable the save button if the length of the item isn't at least 5long characters-->
+            <button v-bind:disabled="newItem.length < 5" @click="saveItem" class="btn btn-primary">Save
+                item</button>
+            <!-- intead of v-bind: we can use just ":"-->
+
+        </div>
+
+        <!-- <br> -->
+
+        <!-- {{newItem}} {{newItemHighPriority}} -->
+
+        <!-- <label><input type="checkbox" v-model="iceCreamFlavours" value="vanilla">Vanilla</label>
+            <label><input type="checkbox" v-model="iceCreamFlavours" value="chocolate">Chocolate</label>
+            <label><input type="checkbox" v-model="iceCreamFlavours" value="starwberry">Starwberry</label>
+            <label><input type="checkbox" v-model="iceCreamFlavours" value="cookies and cream">Cookies and cream</label> -->
+
+        <!-- when we click this link, it will open the page that we wrote in the input-->
+        <!-- <a v-bind:href="newItem">Dynamic link</a> -->
+
+        <p v-if="items.length === 0">Nice job!</p>
+        <ul>
+            <!-- object syntax-->
+            <li v-for="item in reversedItems" @click="togglePurchased(item)" :key="item.id"
+                :class="{strikeout: item.purchased, priority: item.highPriority}" class="static-class">{{item.label}}
+            </li>
+            <!-- strikeout -> to strikeout an item-->
+            <!-- priority -> to make the items red if it's high priority -->
+            <!-- if we want to add an static class we simply add class="static-class"-->
+
+            <!-- array syntax -->
+            <!-- <li v-for="item in items" :key="item.id" :class="[
+            item.purchased ? 'strikeout text-gray' : 'underlined',
+            item.highPriority ? 'priority' : ''
+            ]">{{item.label}}</li> -->
+
+            <!-- or combined -->
+            <!-- <li v-for="item in items" :key="item.id" :class="[
+            {strikeout: item.purchased},
+            {priority: item.highPriority},
+            'static-class'
+            ]">{{item.label}}</li> -->
+
+            <!-- <li v-for="{id, label} in items" :key="id">{{item.label}}</li> -->
+
+            <!-- it should display the indexes from 0-2 but idk it doesn't work-->
+            <!-- <li v-for="{item, index} in items" :key="item.id">{{index}} {{item.label}}</li> -->
+
+            <!-- <li v-for="{item, key} in items" :key="item.id">{{key}} {{item.label}}</li> -->
+        </ul>
+
+        <!-- <input v-model="header"> -->
+        <!-- the title content is changing as we write in the input-->
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        // if we change shoppingList.header in console
+        // the title and the input will change
+        const shoppingList = Vue.createApp({
+            data() {
+                return {
+                    header: "Shopping List app",
+                    editing: false, //when we should be showing/hiding thhe addItem form
+                    newItem: '',
+                    newItemHighPriority: false,
+                    // iceCreamFlavours:[], //when we check a flavour this array will be populated
+                    items: [
+                        { id: 1, label: "10 party hats", purchased: true, highPriority: false },
+                        { id: 2, label: "2 board games", purchased: true, highPriority: false },
+                        { id: 3, label: "20 cups", purchased: false, highPriority: true },
+                    ]
+
+                    // as an object:
+                    // items: {
+                    //     'item-1': {id:1, label:"10 party hats"},
+                    //     'item-2': {id:2, label:"2 board games"},
+                    //     'item-3': {id:3, label:"20 cups"},
+                    // }
+                }
+
+            },
+            // the object that data return is where we can store data
+            // for our vue instances to use
+            methods: {
+                saveItem() {
+                    this.items.push({
+                        id: this.items.length + 1, // automatically increases the id
+                        label: this.newItem, // it takes the value from the input
+                        highPriority: this.newItemHighPriority // it takes the value of the checkbox
+                    })
+                    this.newItem = ""
+                },
+                doEdit(editing) {
+                    this.editing = editing
+                    this.newItem = "" //so we won'r persist unsaved item
+                },
+
+                // this method will be used when we click on the item to strikeout it
+                togglePurchased(item) {
+                    item.purchased = !item.purchased
+                }
+            },
+            // inside of out methods we don't have 
+            // the automatic access to our data, like we did in out v-on
+            // so, in order to reference it we use "this"
+
+            computed:{
+                characterCount(){
+                    return this.newItem.length
+                },
+                reversedItems(){
+                    return [...this.items].reverse()
+                }
+            }
+            // computed properties are a powerful tool from encapsulating data
+            // transformations and manipulations that stay synched with the data thet reference
+            
+            // so, we want to use a computed property to flip our items so that the newest item 
+            // shows up at the top of the list
+            
+            // computed prop are only for transforming data for our presentation layer
+            // they should not alter or change the existing data
+
+            // so, to avoid that we can use the spread operatormto make a clone or a copy of the array
+        })
+            .mount('#shopping-list') //to create a vue instance
+    </script>
+</body>
+
+</html>
+<!--
+    -> vue devtools injects out vue instances into the console
+$vm0 - is out first (and only) instance of the app; we can access and modify the components
+eg: $vm0.data.header 
+    -> vue uses the double mustache syntax to render data to the DOM
+    -> with the v-bind directive, we can couple any HTML attribute to our data 
+    -> computed properties - lets us perform transformations/calculations on our data-->
