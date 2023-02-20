@@ -17,10 +17,8 @@
         We travel the world to source the very best single origin coffee for you
       </h2>
 
-      <div class="plans">
-        <plan v-for="plan in plans" :name="plan"></plan> <!-- name is a prop which we defined in app.js-->
-        <!-- with ":name" we bind the value of each plan with name-->
-      </div>
+      <plan-picker></plan-picker>
+
     </div>
   </div>
 
@@ -31,6 +29,13 @@
            {{name}}
           </span>
         </div>
+      </div>
+    </script>
+
+  <script type="text/x-template" id="plan-picker-template">
+      <div class="plans">
+        <plan v-for="plan in plans" :name="plan"></plan> <!-- name is a prop which we defined in app.js-->
+        <!-- with ":name" we bind the value of each plan with name-->
       </div>
     </script>
 
