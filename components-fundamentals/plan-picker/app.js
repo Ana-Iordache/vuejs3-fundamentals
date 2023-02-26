@@ -1,5 +1,5 @@
 // local component
-let PlanComponent = {
+let PlanPickerItemComponent = {
     template:'#plan-template',
     // props: ['name']
     props: {
@@ -30,8 +30,8 @@ let PlanComponent = {
 
 // now that we've transformed both components in local comp, we won't need the global registration
 let PlanPickerComponent = {
-    components:{plan: PlanComponent},
-    template:'#plan-picker-template',
+    components:{'plan-picker-item': PlanPickerItemComponent}, //or PlanItem without the quotes
+    template:'#plan-picker-item-template',
     data(){
         return{
             plans:['The Single', 'The Curious', 'The Addict'],

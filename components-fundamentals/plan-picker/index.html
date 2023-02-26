@@ -23,7 +23,7 @@
     </div>
   </div>
 
-  <script type="text/x-template" id="plan-template">
+  <script type="text/x-template" id="plan-picker-item-template">
       <div class="plan" :class="{'active-plan':selected}" @click="select">
         <!-- we use :class to add e class dinamically when the plan is selected; we have to wrap the class name in quotes-->
         <!-- a single plan shoul be selected and have the active-plan class; so when we're selecting a plan, the first should.t be selected anymore
@@ -40,12 +40,12 @@
 
   <script type="text/x-template" id="plan-picker-template">
       <div class="plans">
-        <plan 
+        <plan-picker-item 
         v-for="plan in plans" 
         :name="plan"
         :selected="plan === selectedPlan"
         v-on:select="selectPlan" 
-        ></plan> <!-- name is a prop which we defined in app.js-->
+        ></plan-picker-item> <!-- name is a prop which we defined in app.js-->
         <!-- with ":name" we bind the value of each plan with name-->
         <!-- when the select event takes place, we trigger the selectPlan method 
           -> the PlanPickerComponent needs to know which plan the user has selected; we add a data property: selectedPlan-->
