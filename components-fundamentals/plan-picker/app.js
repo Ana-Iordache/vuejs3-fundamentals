@@ -11,6 +11,7 @@ let PlanComponent = {
 
 // now that we've transformed both components in local comp, we won't need the global registration
 let PlanPickerComponent = {
+    components:{plan: PlanComponent},
     template:'#plan-picker-template',
     data(){
         return{
