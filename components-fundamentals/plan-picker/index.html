@@ -24,7 +24,12 @@
   </div>
 
   <script type="text/x-template" id="plan-template">
-      <div class="plan">
+      <div class="plan" :class="{'active-plan':selected}" @click="select">
+        <!-- we use :class to add e class dinamically when the plan is selected; we have to wrap the class name in quotes-->
+        <!-- a single plan shoul be selected and have the active-plan class; so when we're selecting a plan, the first should.t be selected anymore
+        how can we do that - to know from inside the component that another plan is selected?
+      -> we could probbly use props, but the parent is not aware if a plan is selected;
+    we can let the parent know when the user selects a plan => custom event (with $emit in the method select())-->
         <div class="description">
           <span class="title">
            {{name}}
@@ -35,8 +40,16 @@
 
   <script type="text/x-template" id="plan-picker-template">
       <div class="plans">
-        <plan v-for="plan in plans" :name="plan"></plan> <!-- name is a prop which we defined in app.js-->
+        <plan 
+        v-for="plan in plans" 
+        :name="plan"
+        :selected="plan === selectedPlan"
+        v-on:select="selectPlan" 
+        ></plan> <!-- name is a prop which we defined in app.js-->
         <!-- with ":name" we bind the value of each plan with name-->
+        <!-- when the select event takes place, we trigger the selectPlan method 
+          -> the PlanPickerComponent needs to know which plan the user has selected; we add a data property: selectedPlan-->
+        <!-- in :selected we check is selected, and that selected prop will be true-->
       </div>
     </script>
 
@@ -46,3 +59,10 @@
 </body>
 
 </html>
+<!-- SO, IN THIS COMMIT WE DID THE FOLLOWING:
+- when the plan is clicked we call the select method with @click
+- the select method emits a custom event; the payload of this event is the plan to be selected
+- in the parent, we listen to the select event with v-on:selected;
+- and, when it happens we call the selectPlan method which gets the plan from the payload and it sets it to the data (this.selectedPlan)
+- then, we pass the selected prop to the individual plans by comparing the plan to selectedPlan => boolean value passed to the slected prop
+- finally, in the template we use a class binding (:class) to conditionally apply the active-plan class based on if the plan is selected-->
