@@ -1,0 +1,71 @@
+<html>
+
+<body>
+    <div id="app">
+        <h1>Vue.js Slots Fundamentals</h1>
+        <!-- we can use multiple items and each one is independent
+        also, we can use multiple elements inside the todo-items-->
+        <todo-item>
+            Buy bananas
+            <!-- if we didn't use the template element, the paragraph would be rendered in the first slot
+            and wherever we're checking the checkbox, the paragraph will be also have the line-through applied-->
+            <!-- insetad oh the 'v-slot:' we can use # symbol-->
+            <template #description>
+                <p>Bananas are good for your health</p>
+            </template>
+
+            <template #button-text>make it nice</template>
+            
+        </todo-item>
+        <todo-item>Eat bananas</todo-item>
+        <todo-item>
+            Celebrate
+            <!-- <p>Celebrate!</p>
+            <button>Good Morning</button> -->
+        </todo-item>
+        <!-- with slots, instead of passing the item to the component using props
+        we pass the content into the element itself, just like a normal html-->
+    </div>
+
+    <script type="text/x-template" id="todo-item-template">
+        <div>
+            <input type="checkbox" v-model="done">
+         <!-- in order to define a slot, we use the slot element -->
+         <!-- we want to set the 'done' class to the slot element based on the value of the variable 'done'
+        we can also write just "{done}" because the variable has the same name with the class-->
+        <!-- if we are doing this and try to use a class binding on the slot elem itself it won't work
+        because when the component is rendered, the slot elem is replaced with what we pass into it
+        so, to make it work, we can wrap the slot elem inside another element and apply the class binding inside that elem-->
+            <span :class="{done: done}">
+                <slot></slot>
+            </span>    
+            <!-- we can use multiple slots-->
+            <slot name="description"></slot>
+            <!-- whatever content we put into the todo-item elem will be rendered in the default slot
+            so we have to use the v-slot directive on a template element providing the name of the slot
+            as the v-slot's argument-->
+
+            <button><slot name="button-text">Highlight</slot></button>
+            <!-- by default the button slot is required for all of the items
+            so, in order to make it optional we can provide a default value
+            so, if the button-text is provided, it will replace the slot elem,
+            but if it's not provided the default content will be displayed-->
+        </div>
+        <!-- slots cs props
+         when we need to pass html or ther markup to a component, slots are are the way to go
+         when we need to pass data to a component, props are perfect
+         we can use both on the same component-->
+    </script>
+
+    <style>
+        .done{
+            color: green;
+            text-decoration: line-through;
+        }
+    </style>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!-- it doesn't work but idk why..-->
+<html>
+
+<body>
+    <div id="app">
+        <page-layout>
+            <template #header>
+                <h1>Some page title</h1>
+            </template>
+
+            <p>A paragraph for the main content</p>
+            <p>Another paragraph</p>
+
+            <template #footer>
+                <p>Some contact info</p>
+            </template>
+        </page-layout>
+    </div>
+
+    <script type="text/x-template" id="page-layout-template">
+        <div class="container">
+            <header>
+                <slot name="header"></slot>
+            </header>
+            <main>
+                <slot></slot>
+            </main>
+            <footer>
+                <slot name="footer"></slot>
+            </footer>
+        </div>
+    </script>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="app.js"></script>
+    <style>
+        .container {
+            max-width: 1920;
+            padding: 10px;
+        }
+
+        header {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        footer {
+            width: 100%;
+            margin-top: 50px;
+            text-align: center;
+        }
+    </style>
+</body>
+
+</html>
