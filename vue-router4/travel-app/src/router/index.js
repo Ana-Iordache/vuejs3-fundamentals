@@ -1,9 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import Brazil from "@/views/Brazil.vue";
-import Jamaica from "@/views/Jamaica.vue";
-import Hawaii from "@/views/Hawaii.vue";
-import Panama from "@/views/Panama.vue";
 
 const routes = [
   {
@@ -11,36 +7,39 @@ const routes = [
     name: "home",
     component: HomeView,
   },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"), //dynamic import
-  },
+  // {
+  //   path: "/about",
+  //   name: "about",
+  //   // route level code-splitting
+  //   // this generates a separate chunk (about.[hash].js) for this route
+  //   // which is lazy-loaded when the route is visited.
+  //   component: () =>
+  //     import(/* webpackChunkName: "about" */ "../views/AboutView.vue"), //dynamic import
+  // },
   {
     path: "/brazil",
     name: "brazil",
-    component: Brazil,
+    component: () => import(/* webpackChunkName: "brazil" */ "@/views/Brazil.vue"),
   },
   {
     path: "/jamaica",
     name: "Jamaica",
-    component: Jamaica,
+    component: () => import(/* webpackChunkName: "jamaica" */ "@/views/Jamaica.vue"),
   },
   {
     path: "/hawaii",
     name: "Hawaii",
-    component: Hawaii,
+    component: () => import(/* webpackChunkName: "hawaii" */ "@/views/Hawaii.vue"),
   },
   {
     path: "/panama",
     name: "Panama",
-    component: Panama,
+    component: () => import(/* webpackChunkName: "panama" */ "@/views/Panama.vue"),
   }
 ];
+
+/* webpackChunkName: "namePage" */ 
+//---> this is called a magic comment and it will give the name of the page (or what we specify inside the "") to the chunk
 
 // this creates the router instance for our application
 const router = createRouter({
@@ -57,3 +56,10 @@ const router = createRouter({
 });
 
 export default router;
+// in devtools -> network -> JS => app.js file - loads all the js for the entire app
+// <=> javascript bundle; it would be better to only load the js for the home page on the home page
+// and the js for the brazil page n the brazil page
+// and that this only loads if we actually go to the respective pages
+// => the app would be mush lither and faster
+// using the webpack code splitting we can split our bundle into multiple smaller files called chunks/bundles
+// in our case we can split each page and load the required code only when the route is being visited
