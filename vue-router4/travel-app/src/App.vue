@@ -1,9 +1,15 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div id="nav">
+    <router-link to="/">Home</router-link>
+    <router-link to="/brazil">Brazil</router-link>
+    <router-link to="/hawaii">Hawaii</router-link>
+    <router-link to="/jamaica">Jamaica</router-link>
+    <router-link to="/panama">Panama</router-link>
+  </div>
+  <div class="container">
+    <router-view></router-view>
+  </div>
+
   <!-- the router-view component is a functional component that renders the matched component
   for the given path; it always render the content of the active page-->
   <!-- if we create an "a" tag the page would be refreshed,
@@ -22,26 +28,3 @@
     - 
   -->
 </template>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
