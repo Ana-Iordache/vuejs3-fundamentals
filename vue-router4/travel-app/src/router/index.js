@@ -53,6 +53,8 @@ const router = createRouter({
 
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  // linkActiveClass: 'vue-school-active-link' // the class which will apply to the active link
+  // vue router takes care of the more important parts of knowing what link corresponds to the current page
 });
 
 export default router;
